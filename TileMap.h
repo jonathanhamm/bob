@@ -2,7 +2,8 @@
 // Julien Richard-Foy
 // Fixed for compatibility with TIGCCLIB double-buffering by Kevin Kofler
 // 2004-07-01, 2005-01-01
-
+#ifndef TILEMAP_H_
+#define TILEMAP_H_
 
 // Quelques constantes
 #define BIG_VSCREEN_SIZE 5440
@@ -228,3 +229,5 @@ void DrawGrayAnimatedPlane8B(short x asm("%d0"),short y asm("%d1"),AnimatedPlane
 #define TM_GMASK89 DrawGrayBuffer89_MASK
 #define TM_GTRANW89 DrawGrayBuffer89_TRANW
 #define TM_GTRANB89 DrawGrayBuffer89_TRANB
+
+#endif

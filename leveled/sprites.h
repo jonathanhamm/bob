@@ -1,7 +1,7 @@
 #ifndef SPRITES_H_
 #define SPRITES_H_
 
-unsigned char sprite[][16] = {
+unsigned char tiles[][16] = {
     /* tile1 */
     {
     	0xFF,0xFF,0x81,0xFF,
