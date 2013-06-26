@@ -50,7 +50,7 @@ Use Return Value=0
 Enable Error Return=0
 Save Screen=1
 [File Editing]
-Open File=Z:\bob\leveled\gui.c
+Open File=Z:\bob\leveled\main.c
 [Included Files]
 C File 1=main.c
 C File 2=gui.c
@@ -61,3 +61,4 @@ Header File 2=Z:\bob\extgraph.h
 Header File 3=sprites.h
 Header File 4=level.h
 Header File 5=gui.h
+Header File 6=all.h

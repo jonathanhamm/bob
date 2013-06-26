@@ -2,15 +2,17 @@
 #include "extgraph.h"
 #include "sprites.h"
 #include "level.h"
+#include "gui.h"
+#include "all.h"
 #include <tigcclib.h>
 
 #define INIT_MAPSIZE ((LCD_WIDTH / 8) * (8 + (LCD_HEIGHT / 8)))
 
 static char fontbk;
-static void *dbuf_hlight;
-static void *dbuf_hdark;
-static void	*dbuf_alight;
-static void *dbuf_adark;
+void *dbuf_hlight;
+void *dbuf_hdark;
+void	*dbuf_alight;
+void *dbuf_adark;
 static INT_HANDLER ai1,ai5;
 static char db_block[(unsigned long)GRAYDBUFFER_SIZE+2*GRAY_BIG_VSCREEN_SIZE+BIG_VSCREEN_SIZE+480];
 static char big_vscreen[GRAY_BIG_VSCREEN_SIZE*2+LCD_SIZE*2];
@@ -41,7 +43,11 @@ void _main(void)
 	dbuf_alight = GrayDBufGetActivePlane (LIGHT_PLANE);
 	dbuf_adark = GrayDBufGetActivePlane (DARK_PLANE);
 	
+	//menu_s *test = menu_s_ (
+	
 	eloop();
+	
+	//menu_s_(short x, short y, short width, short height, short color, key_s event);
 	
 	GrayOff();
 	
@@ -66,6 +72,7 @@ void eloop (void)
 	
 	tile = 1;
 	memset(&level, 0, sizeof(level));
+	menu_s *menu = menu_s_(4,4, 30, 40, COLOR_BLACK, EVENT_(RR_F1));
 
 	level.plane.width = 1000;
 	level.plane.sprites = tiles;
@@ -116,6 +123,7 @@ void eloop (void)
 		if (_keytest(RR_2ND)) {
 			((char *)level.plane.matrix)[level.y_ * level.plane.width + level.x_] = tile;
 		}
+		menu->condition(menu);
 		
 		drawplane (level);
 		drawtile (level, tile);
