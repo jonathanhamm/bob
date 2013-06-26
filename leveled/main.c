@@ -17,7 +17,6 @@ static INT_HANDLER ai1,ai5;
 static char db_block[(unsigned long)GRAYDBUFFER_SIZE+2*GRAY_BIG_VSCREEN_SIZE+BIG_VSCREEN_SIZE+480];
 static char big_vscreen[GRAY_BIG_VSCREEN_SIZE*2+LCD_SIZE*2];
 
-static void delay (unsigned short time);
 static void eloop (void);
 static inline void drawplane (level_s level) __attribute__((always_inline));
 static inline void drawtile (level_s level, unsigned short tile) __attribute__((always_inline));
@@ -57,14 +56,6 @@ void _main(void)
   FontSetSys(fontbk);
 }
 
-void delay (unsigned short time)
-{
-	unsigned short randNum;
-	
-  while (time-- > 0)
-     randNum = rand() % time;
-}
-
 void eloop (void)
 {
 	level_s level;
@@ -72,8 +63,12 @@ void eloop (void)
 	
 	tile = 1;
 	memset(&level, 0, sizeof(level));
-	menu_s *menu = menu_s_(4,4, 30, 40, COLOR_BLACK, EVENT_(RR_F1));
-
+	menu_s *menu = menu_s_(4,4, AUTO_SIZE , COLOR_BLACK, EVENT_(RR_F1));
+	menu_add (menu, "derp");
+	menu_add (menu, "derp");
+	menu_add (menu, "derp");
+	menu_add (menu, "derp");
+	
 	level.plane.width = 1000;
 	level.plane.sprites = tiles;
 	level.plane.big_vscreen = big_vscreen;

@@ -1,6 +1,9 @@
 #ifndef GUI_H_
 #define GUI_H_
 
+#define SCREEN_BACKUP 1
+
+#define AUTO_SIZE -1, -1
 #define EVENT_(event) (key_s){event}
 
 typedef struct toolbar_s toolbar_s;
@@ -25,11 +28,15 @@ struct menu_s
 	short y;
 	short width;
 	short height;
+	short autosize_width;
+	short autosize_height;
 	short color;
 	key_s event;
 	void *(*active)(menu_s *);
 	void *(*condition)(menu_s *);
+#ifdef SCREEN_BACKUP
 	void *backup;
+#endif
 	short nitems;
 	char **text;
 };

@@ -6,4 +6,6 @@ extern void *dbuf_hdark;
 extern void	*dbuf_alight;
 extern void *dbuf_adark;
 
+extern void delay (unsigned short time);
+
 #endif
