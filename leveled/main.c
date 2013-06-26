@@ -62,20 +62,18 @@ void delay (unsigned short time)
 void eloop (void)
 {
 	level_s level;
-	unsigned short tile;
+	unsigned char tile;
 	
 	tile = 1;
 	memset(&level, 0, sizeof(level));
-	level.plane.matrix = malloc(INIT_MAPSIZE);
-	if (!level.plane.matrix)
-		return;
-	level.plane.width = LCD_WIDTH / 8;
+
+	level.plane.width = 1000;
 	level.plane.sprites = tiles;
 	level.plane.big_vscreen = big_vscreen;
 	level.plane.force_update = 1;
-	level.height = 8+(LCD_HEIGHT / 8);
-	
-	if (!level.plane.big_vscreen)
+	level.height = 20;
+	level.plane.matrix = calloc(level.plane.width, level.height);
+	if (!level.plane.matrix)
 		return;
 	
 	while (!_keytest(RR_ESC)) {
@@ -85,43 +83,44 @@ void eloop (void)
 				if (level.x > 0)
 					level.x--;
 				else 
-					level.mx--;
+					level.mx -= 8;
 			}
 		}
-		else if (_keytest(RR_RIGHT)) {
+		if (_keytest(RR_RIGHT)) {
 			if (level.x_ < level.plane.width) {
 				level.x_++;
-				if (level.x < 160 / 8)
+				if (level.x < (LCD_WIDTH / 8) - 1)
 					level.x++;
 				else
-					level.mx++;
+					level.mx += 8;
 			}
 		}
-		else if (_keytest(RR_UP)) {
+		if (_keytest(RR_UP)) {
 			if (level.y_ > 0) {
 				level.y_--;
 				if (level.y > 0)
 					level.y--;
 				else
-					level.my--;
+					level.my -= 8;
 			}
 		}
-		else if (_keytest(RR_DOWN)) {
+		if (_keytest(RR_DOWN)) {
 			if (level.y_ < level.height) {
 				level.y_++;
-				if (level.y < 8 + (100 / 8)) 
+				if (level.y < LCD_HEIGHT / 8)
 					level.y++;
 				else
-					level.my++;
+					level.my += 8;
 			}
 		}
-		else if (_keytest(RR_2ND)) {
+		if (_keytest(RR_2ND)) {
 			((char *)level.plane.matrix)[level.y_ * level.plane.width + level.x_] = tile;
 		}
+		
 		drawplane (level);
 		drawtile (level, tile);
 		refresh();
-		delay(5000);
+		delay(1000);
 	}
 	free(level.plane.matrix);
 }
