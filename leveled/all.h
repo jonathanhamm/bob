@@ -7,5 +7,5 @@ extern void	*dbuf_alight;
 extern void *dbuf_adark;
 
 extern void delay (unsigned short time);
-
+extern void refresh (void);
 #endif

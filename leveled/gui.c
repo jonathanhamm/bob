@@ -28,7 +28,6 @@ menu_s *menu_s_(short x, short y, short width, short height, short color, key_s 
 		menu->autosize_height = 1;
 		menu->height = 2;
 	}
-	menu->height = height;
 	menu->color = color;
 	menu->event = event;
 	menu->active = activedefault;
@@ -92,19 +91,20 @@ void toolbar_add (toolbar_s *toolbar, menu_s *menu)
 
 void draw_menu (menu_s *menu)
 {
-
-#ifdef SCREEN_BACKUP
 	short i;
+	
+#ifdef SCREEN_BACKUP
 	short eff_width;
 	eff_width = (menu->width / 8) + (menu->width % 8) ? 1 : 0;
 	menu->backup = malloc(2 * ((menu->width + (8 - menu->width % 8)) * menu->height));
 	if (!menu->backup)
 		return;
 	for (i = 0; i < eff_width; i++)
-		GrayFastGetBkgrnd8_R(menu->x + (8 * i), menu->y, menu->height, dbuf_alight, dbuf_adark, menu->backup);
+		GrayFastGetBkgrnd8_R(menu->x + (8 * i), menu->y, menu->height, dbuf_hlight, dbuf_hdark, menu->backup);
 #endif
-
-	GrayFastFillRect_R(dbuf_alight, dbuf_adark, menu->x, menu->y, menu->x + menu->width, menu->y + menu->height, menu->color);
+	GrayFastFillRect_R(dbuf_hlight, dbuf_hdark, menu->x, menu->y, menu->x + menu->width, menu->y + menu->height, menu->color);
+	for (i = 0; i < menu->nitems; i++)
+		GrayDrawStr2B(menu->x+1, menu->y+1 + 6*i, menu->text[i], A_XOR, dbuf_hlight, dbuf_hdark);
 }
 
 void hide_menu (menu_s *menu)
@@ -114,8 +114,10 @@ void hide_menu (menu_s *menu)
 
 void *activedefault (menu_s *menu)
 {
+	GrayInvertRect2B(menu->x+1, menu->y+1, menu->x+menu->width-1, menu->y+5, dbuf_hlight, dbuf_hdark);
 	while (!_keytest(RR_ESC) && !_keytest(EVENT__(menu->event))) {
 		
+		refresh();
 	}
 	while(_keytest(RR_ESC) || _keytest(EVENT__(menu->event)));
 	return NULL;
@@ -126,6 +128,7 @@ static void *eventdefault (menu_s *menu)
 	if (_keytest(EVENT__(menu->event))) {
 		while(_keytest(EVENT__(menu->event)));
 		draw_menu(menu);
+		refresh();
 		return menu->active(menu);
 	}
 	return NULL;

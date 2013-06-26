@@ -20,7 +20,6 @@ static char big_vscreen[GRAY_BIG_VSCREEN_SIZE*2+LCD_SIZE*2];
 static void eloop (void);
 static inline void drawplane (level_s level) __attribute__((always_inline));
 static inline void drawtile (level_s level, unsigned short tile) __attribute__((always_inline));
-static inline void refresh (void) __attribute__((always_inline));
 
 void _main(void)
 {
@@ -118,10 +117,9 @@ void eloop (void)
 		if (_keytest(RR_2ND)) {
 			((char *)level.plane.matrix)[level.y_ * level.plane.width + level.x_] = tile;
 		}
-		menu->condition(menu);
-		
 		drawplane (level);
 		drawtile (level, tile);
+		menu->condition(menu);
 		refresh();
 		delay(1000);
 	}
@@ -136,10 +134,4 @@ inline void drawplane (level_s level)
 inline void drawtile (level_s level, unsigned short tile)
 {
 	GrayITile8x8_RPLC_R(level.x, level.y << 3, tiles[tile], dbuf_hlight, dbuf_hdark);
-}
-
-inline void refresh (void)
-{
-	FastCopyScreen(dbuf_hlight, dbuf_alight);
-	FastCopyScreen(dbuf_hdark, dbuf_adark);
 }
